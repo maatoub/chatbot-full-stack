@@ -1,33 +1,36 @@
-import {Button, TextField} from "@vaadin/react-components";
-import {useState} from "react";
-import {ChatAiService} from "Frontend/generated/endpoints";
+import { Button, TextField } from "@vaadin/react-components";
+import { useState } from "react";
 import Markdown from "react-markdown";
 
+ import { ChatAiService } from "Frontend/generated/endpoints";
+
 export default function Chat() {
-    //usestate permet de creer objet dans laquel on a variable question et une methode setQuestion permet changer cette variable
-    const [question,setQuestion] = useState<string>("");
-    const [response,setresponse] = useState<string>("");
+  // usestate permet de creer objet dans laquel on a variable question et une methode setQuestion permet changer cette variable
 
-    async function send(){
-        ChatAiService.ragChat(question).then(resp=> {
-            setresponse(resp);
-        });
+  const [question, setQuestion] = useState<string>("");
+  const [response, setResponse] = useState<string>("");
 
-    }
-    return(
-      <div className="p-m">
-          <h3>Chat Bot</h3>
-          <div>
-              <TextField style={{width:'80%'}}
-                         onChange={e=>setQuestion(e.target.value)}/>
-              <Button theme="primary" onClick={send}>Send</Button>
-              <div>
-                  <Markdown>
-                       {response}
-                  </Markdown>
+  async function send() {
+    ChatAiService.askIllm(question).then((resp) => {
+      setResponse(resp);
+    });
+  }
 
-              </div>
-          </div>
+  return (
+    <div className="p-m">
+      <h3>Chat Bot</h3>
+      <div>
+        <TextField
+          style={{ width: "80%" }}
+          onChange={(e) => setQuestion(e.target.value)}
+        />
+        <Button theme="primary" onClick={send}>
+          Send
+        </Button>
+        <div>
+          <Markdown>{response}</Markdown>
+        </div>
       </div>
-    );
+    </div>
+  );
 }
